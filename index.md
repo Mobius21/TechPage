@@ -4,7 +4,7 @@ Here are some technical part from the project I have participated before.
 
 ### College Raptor Group Capstone Project 
 
-This project is sponsored by [College Raptor Inc.](https://www.collegeraptor.com/), a company focused on helping high school students make smarter decisions on choosing the college. Specifically, College Raptor helps students to find the colleges that fit their needs based on student preferences and personal information. In order to help colleges understand what a family’s Expected Family Contribution (EFC) will be, we need to create a more accurate model to predict a family’s ability to pay using Zillow and Melissa data. The model will be used to better help colleges effectively and efficiently market to potential students based on potential fit due to their Expected Family Contribution (EFC). The Melissa API code listed below is part of the work used for the data preparation that gets 10 addresses based on one unique zip+4. 
+The project is sponsored by [College Raptor Inc.](https://www.collegeraptor.com/), a company focused on helping high school students make smarter decisions on choosing their college. College Raptor helps students to find the colleges that fit their needs based on student preferences and personal information. In order to create a more accurate model for College Raptor, the team used data from Melissa. The Melissa API code listed below is part of the work used for the data preparation that gets 10 addresses based on one unique Zip+4.
 
 ```markdown
 // **Rscript** code with syntax highlighting.
