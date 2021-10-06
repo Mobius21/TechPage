@@ -1,6 +1,178 @@
 ## Welcome to My Technical Sample Pages
 
-Here are some technical part from the project I have participated before. 
+Here are some technical part from the following project I have participated before. 
+- Barcode Transformation Project using Excel VBA
+- College Raptor Group Capstone Project using R
+- Iowa City Safest County Project using SQL
+
+### Barcode Transformation Project
+
+This project is created by [American Bear Logistics Inc.](https://www.americanbearlogistics.com/), the international logistic company located in Itasca, IL. It provides a one-stop service for both traditional and E-Commerce customers. Its business covers ocean, air, land shipping, and warehousing. It operates multiple warehouse facilities, bonded warehouses, and trailers. 
+In the summer 2021, I was able to join the team as the intern of the Business Analyst. My first project was to find a way to help operators converting date, batch number and package number as a serial of Barcode using Code 128. I work a week and create a Macro file with VBA code that can use for all Barcode convertion projects.
+
+
+```markdown
+// **Excel VBA** code
+
+Option Explicit
+Dim lenList As Integer
+Dim i As Integer, LastRow As Integer
+
+Sub DataToBarCode()
+
+    Call createHorizon
+    
+    Worksheets("Horizon").Activate
+    Dim m As Integer, n As Integer, ct As Integer
+    Dim LastCol As Integer
+    Dim curr As String
+    Dim arr() As String
+    ct = 0
+    With Range("A2")
+        LastCol = lenList
+        Debug.Print "Last Column is " & LastCol
+        For i = 0 To LastCol
+            LastRow = .Offset(1, i) - 1
+            Debug.Print LastRow
+            For m = 0 To LastRow
+                ct = ct + 1
+                ReDim Preserve arr(1 To ct)
+                curr = .Offset(2 + m, i)
+                arr(ct) = curr
+            Next m
+        Next i
+    End With
+    
+    Worksheets("DASHBOARD").Activate
+    
+    Range("G:G").ClearContents
+    Range("G1") = "Barcode"
+    Range("G1").Font.Bold = True
+    With Range("G1")
+        For n = 1 To ct
+            .Offset(n, 0) = arr(n)
+        Next n
+    End With
+    
+    LastRow = UBound(arr)
+    Debug.Print LastRow
+    
+    'Stop
+    
+    Worksheets("TEMPLET").Activate
+    Range("A:C").ClearContents
+    
+    Dim Remain As Integer, irow As Integer
+    Remain = LastRow * 1
+    ct = 0
+    With Range("A1")
+        Do While Remain > 0
+            irow = LastRow - Remain
+            For i = 0 To WorksheetFunction.Min(2, Remain - 1)
+                .Offset(irow + 0, i) = "Originated U.S.A."
+                .Offset(irow + 1, i) = Code128(arr(i + irow + 1))
+                .Offset(irow + 2, i) = arr(i + irow + 1)
+                ct = ct + 1
+            Next
+            With Range(.Offset(irow + 0, 0), .Offset(irow + 0, 2))
+                .Font.Name = "OCRB"
+                .Font.Size = 9
+                .HorizontalAlignment = xlCenter
+                .VerticalAlignment = xlBottom
+            End With
+            With Range(.Offset(irow + 1, 0), .Offset(irow + 1, 2))
+                .Font.Name = "Code 128"
+                .Font.Size = 36
+                .HorizontalAlignment = xlCenter
+                .VerticalAlignment = xlBottom
+            End With
+            With Range(.Offset(irow + 2, 0), .Offset(irow + 2, 2))
+                .NumberFormat = "0"
+                .Font.Name = "OCRB"
+                .Font.Size = 9
+                .HorizontalAlignment = xlCenter
+                .VerticalAlignment = xlTop
+            End With
+            
+            Remain = Remain - WorksheetFunction.Min(3, Remain)
+        Loop
+    End With
+    
+    Call LastFormat
+    
+End Sub
+   
+Private Sub LastFormat()
+    
+    Worksheets("TEMPLET").Activate
+    Columns("A:C").Select
+    
+    With Selection
+        .Borders(xlDiagonalDown).LineStyle = xlNone
+        .Borders(xlDiagonalUp).LineStyle = xlNone
+        .Borders(xlEdgeLeft).LineStyle = xlNone
+        .Borders(xlEdgeTop).LineStyle = xlNone
+        .Borders(xlEdgeBottom).LineStyle = xlNone
+        .Borders(xlEdgeRight).LineStyle = xlNone
+        .Borders(xlInsideVertical).LineStyle = xlNone
+        .Borders(xlInsideHorizontal).LineStyle = xlNone
+        .Interior.Pattern = xlNone
+        .Interior.TintAndShade = 0
+        .Interior.PatternTintAndShade = 0
+    End With
+    
+End Sub
+
+Private Sub setupHorizon()
+    
+    Worksheets("Horizon").Activate
+    Cells.Clear
+
+    Worksheets("DASHBOARD").Activate
+    lenList = Cells(Rows.Count, 1).End(xlUp).Row - 1
+    'Debug.Print lenList
+    
+    Dim sourceRange As Range
+    Dim targetRange As Range
+    Set sourceRange = Worksheets("DASHBOARD").Range("A2", Range("A2").Offset(lenList - 1, 2))
+    Set targetRange = Worksheets("Horizon").Range("A1")
+    sourceRange.Copy
+    targetRange.PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks:=False, Transpose:=True
+
+End Sub
+
+
+Private Sub createHorizon()
+    
+    Call setupHorizon
+    
+    Worksheets("Horizon").Activate
+    Dim icol As Integer, irow As Integer
+    Dim currDate As String, currBatch As Integer, currQuan As Integer, currVal As String
+    
+    With Range("A1")
+        For icol = 0 To lenList
+            currDate = .Offset(0, icol)
+            currBatch = .Offset(1, icol)
+            currQuan = .Offset(2, icol)
+            
+            For irow = 1 To currQuan
+                currVal = CStr(Format(currDate, "YYYYMMDD")) & Format(currBatch, "00") & Format(irow, "000")
+                'Debug.Print currVal
+                .Offset(2 + irow, icol) = currVal
+                .Offset(2 + irow, icol).NumberFormat = "0"
+            Next irow
+            
+        Next icol
+    End With
+
+End Sub
+
+
+```
+
+
+
 
 ### College Raptor Group Capstone Project 
 
